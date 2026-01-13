@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: Dynamic E-commerce Platform API
+  version: 1.0.0
+  description: API for product discovery, cart management, and secure checkout.
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        description: { type: string }
+        price: { type: number, format: float }
+        stock_level: { type: integer }
+        category_id: { type: string, format: uuid }
+
+    Order:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        total_price: { type: number, format: float }
+        status: { type: string, enum: [pending, paid, shipped, delivered, cancelled] }
+        order_date: { type: string, format: date-time }
+
+paths:
+  /auth/login:
+    post:
+      summary: Login and receive JWT
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+
+  /products:
+    get:
+      summary: List all products
+      parameters:
+        - name: category_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        200:
+          description: List of products
+
+  /cart/add:
+    post:
+      summary: Add item to cart
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id: { type: string, format: uuid }
+                quantity: { type: integer }
+      responses:
+        200:
+          description: Item added
+
+  /orders:
+    post:
+      summary: Create an order (checkout)
+      security: [{ bearerAuth: [] }]
+      responses:
+        201:
+          description: Order created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+
+  /admin/products:
+    post:
+      summary: (Admin) Create product
+      security: [{ bearerAuth: [] }]
+      responses:
+        201:
+          description: Product created
