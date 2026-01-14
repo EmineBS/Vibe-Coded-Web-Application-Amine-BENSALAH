@@ -50,49 +50,62 @@ const AdminOrders = () => {
         }
     };
 
-    if (loading) return <div className="loader">Loading orders...</div>;
-    if (error) return <div className="error-badge">{error}</div>;
+    if (loading) return <div className="p-8 text-center text-gray-500">Loading orders...</div>;
+    if (error) return <div className="p-4 bg-red-50 text-red-700 rounded-md border border-red-200">{error}</div>;
 
     return (
-        <div className="admin-orders">
-            <table className="admin-table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>User ID</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orders.map(order => (
-                        <tr key={order.id}>
-                            <td>#{order.id.slice(0, 8)}</td>
-                            <td>{order.user_id ? order.user_id.slice(0, 8) : 'Guest'}</td>
-                            <td>${parseFloat(order.total_price).toFixed(2)}</td>
-                            <td>
-                                <span className={`status-badge ${order.status.toLowerCase()}`}>
-                                    {order.status}
-                                </span>
-                            </td>
-                            <td className="actions-cell">
-                                <select
-                                    value={order.status}
-                                    onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                                    className="status-select"
-                                >
-                                    <option value="pending">Pending</option>
-                                    <option value="paid">Paid</option>
-                                    <option value="shipped">Shipped</option>
-                                    <option value="delivered">Delivered</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </td>
+        <div className="space-y-4">
+            <div className="flex justify-between items-center">
+                <h2 className="text-lg font-bold text-gray-800">Order Management</h2>
+                <div className="text-sm text-gray-500">Total Orders: {orders.length}</div>
+            </div>
+
+            <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm text-gray-600">
+                    <thead className="bg-gray-50 border-b border-gray-200 text-xs uppercase font-semibold text-gray-700">
+                        <tr>
+                            <th className="px-4 py-3">Order ID</th>
+                            <th className="px-4 py-3">User ID</th>
+                            <th className="px-4 py-3">Total</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3 text-right">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {orders.map(order => (
+                            <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                                <td className="px-4 py-3 font-mono text-xs">{order.id.slice(0, 8)}...</td>
+                                <td className="px-4 py-3 text-xs">{order.user_id ? order.user_id.slice(0, 8) + '...' : 'Guest'}</td>
+                                <td className="px-4 py-3 font-bold text-gray-900">${parseFloat(order.total_price).toFixed(2)}</td>
+                                <td className="px-4 py-3">
+                                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider
+                                        ${order.status === 'paid' ? 'bg-blue-100 text-blue-800' : ''}
+                                        ${order.status === 'shipped' ? 'bg-yellow-100 text-yellow-800' : ''}
+                                        ${order.status === 'delivered' ? 'bg-green-100 text-green-800' : ''}
+                                        ${order.status === 'cancelled' ? 'bg-red-100 text-red-800' : ''}
+                                        ${order.status === 'pending' ? 'bg-gray-100 text-gray-800' : ''}
+                                     `}>
+                                        {order.status}
+                                    </span>
+                                </td>
+                                <td className="px-4 py-3 text-right">
+                                    <select
+                                        value={order.status}
+                                        onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
+                                        className="bg-white border border-gray-300 text-gray-700 py-1 px-2 rounded-md text-xs focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="paid">Paid</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

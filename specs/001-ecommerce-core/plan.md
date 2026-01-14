@@ -5,12 +5,16 @@
 
 ## Summary
 
-Implementation of a full-stack e-commerce platform with Guest, Registered User, and Admin actors. The system will feature a modular React frontend and a clean Node.js/Express backend, persisted in a PostgreSQL database. Key flows include secure JWT-based checkout with simulated payment provider integration and a comprehensive admin dashboard for catalog management.
+Implementation of a full-stack e-commerce platform with Guest, Registered User, and Admin actors.
+- **Frontend**: A React application built with Vite, styled with TailwindCSS for a responsive, modern UI.
+- **Backend**: A Node.js/Express server providing RESTful APIs.
+- **Database**: PostgreSQL for persistent storage, managed via `node-postgres`.
+Key flows include secure JWT-based checkout with simulated payment provider integration and a comprehensive admin dashboard for catalog management.
 
 ## Technical Context
 
 **Language/Version**: Node.js (v20+), JavaScript (ESM)
-**Primary Dependencies**: React (Vite), Express, pg (node-postgres), redis (caching), jsonwebtoken, Zod (validation), Helmet, CORS, express-rate-limit, EventEmitter (internal)
+**Primary Dependencies**: React (Vite), Express, pg (node-postgres), redis (caching), jsonwebtoken, Zod (validation), Helmet, CORS, express-rate-limit, EventEmitter (internal), TailwindCSS
 **Storage**: PostgreSQL
 **Testing**: Vitest (Frontend), Supertest + Jest (Backend)
 **Target Platform**: Linux VPS
@@ -72,6 +76,8 @@ frontend/
 │   ├── hooks/           # Business Logic
 │   ├── pages/           # Route views
 │   └── main.jsx         # App Entry
+├── tailwind.config.js   # Tailwind Configuration
+├── postcss.config.js    # PostCSS Configuration
 └── tests/
 ```
 

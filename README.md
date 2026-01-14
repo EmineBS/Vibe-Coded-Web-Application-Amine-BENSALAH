@@ -21,8 +21,9 @@ The project follows a decoupled architecture:
 - **Responsive Adaptive Grid**: Fluid layout that scales from mobile devices to ultra-wide monitors.
 - **Real-time Search & Filtering**: Instant product discovery by name and category.
 - **Secure Authentication UI**: Premium login and registration flows with persistent sessions.
-- **Order Management**: User-specific order history views.
-- **Light/Dark Mode**: Full theme support with automatic preference saving.
+- **Order Management**: User-specific order history views with dynamic image rendering.
+- **Light/Dark Mode**: Full theme support (Amazon Dark/Light) with automatic preference saving.
+- **Dynamic Cart**: Real-time cart management with instant visual feedback and image support.
 
 ### Backend (Node.js)
 - **Secure Auth**: JWT-based session management with access/refresh tokens.
@@ -31,7 +32,7 @@ The project follows a decoupled architecture:
 - **Redis Caching**: High-performance caching layer for product listings, details, and categories with intelligent invalidation.
 - **Event-Driven Architecture**: Decoupled business logic using an internal event bus for security logging, notifications, and analytics.
 - **Security Baseline**: Helmet for headers, CORS for cross-origin protection, and BCrypt for password hashing.
-- **Performance**: Optimized SQL queries and modular service-based architecture.
+- **Performance**: Optimized SQL queries, modular service-based architecture, and automated content population scripts.
 
 ## 🛠️ Security Measures
 
@@ -55,6 +56,7 @@ ecommerce-platform/
 │   │   ├── subscribers/ # Event Handlers (Security, Notifications)
 │   │   ├── constants/  # Domain Events & Config
 │   │   └── utils/      # Cache Utilities
+│   └── scripts/        # Maintenance Scripts (Image Update, Redis Flush)
 ├── frontend/           # React App
 │   ├── src/
 │   │   ├── components/ # UI Components (Navbar, Grid, Modal)

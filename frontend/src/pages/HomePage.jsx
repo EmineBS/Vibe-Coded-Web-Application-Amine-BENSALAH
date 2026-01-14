@@ -79,7 +79,7 @@ const HomePage = ({ onLoginClick, onOrdersClick, theme, toggleTheme }) => {
     };
 
     return (
-        <div className="home-page amz-layout">
+        <div className="flex flex-col min-h-screen">
             <Navbar
                 cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
                 onCartClick={() => setIsCartOpen(true)}
@@ -96,12 +96,16 @@ const HomePage = ({ onLoginClick, onOrdersClick, theme, toggleTheme }) => {
                 onCategorySelect={handleCategorySelect}
             />
 
-            <main className="content-main">
-                <section className="products-grid-container">
+            <main className="flex-grow max-w-screen-2xl mx-auto w-full p-4 md:p-6 bg-gray-100">
+                <section className="mt-4">
                     {loading ? (
-                        <div className="loader">Loading products...</div>
+                        <div className="flex justify-center items-center h-64 text-xl font-medium text-gray-500">
+                            Loading products...
+                        </div>
                     ) : error ? (
-                        <div className="error-message">{error}</div>
+                        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-md text-center">
+                            {error}
+                        </div>
                     ) : (
                         <ProductGrid products={products} onAddToCart={addToCart} />
                     )}

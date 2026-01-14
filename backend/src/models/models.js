@@ -87,7 +87,7 @@ export const orderItemModel = (knex) => ({
 
     findByOrderId: (orderId) => {
         return knex('order_items')
-            .select('order_items.*', 'products.name as product_name')
+            .select('order_items.*', 'products.name as product_name', 'products.image_url')
             .leftJoin('products', 'order_items.product_id', 'products.id')
             .where({ order_id: orderId });
     },

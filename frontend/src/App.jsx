@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
 import OrderHistory from './pages/OrderHistory';
+import Footer from './components/Footer';
 
 const AppContent = () => {
   const { user, loading } = useAuth();
@@ -64,7 +65,12 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <AppContent />
+      <div className="min-h-screen flex flex-col bg-gray-100 font-sans">
+        <div className="flex-grow">
+          <AppContent />
+        </div>
+        <Footer />
+      </div>
     </AuthProvider>
   );
 };

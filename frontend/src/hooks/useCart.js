@@ -16,11 +16,11 @@ export const useCart = () => {
             if (existing) {
                 return prev.map((item) =>
                     item.product_id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
+                        ? { ...item, quantity: item.quantity + 1, image_url: product.image_url }
                         : item
                 );
             }
-            return [...prev, { product_id: product.id, name: product.name, price: product.price, quantity: 1 }];
+            return [...prev, { product_id: product.id, name: product.name, price: product.price, image_url: product.image_url, quantity: 1 }];
         });
     };
 

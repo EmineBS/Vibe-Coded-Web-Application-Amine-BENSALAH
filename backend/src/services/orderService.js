@@ -1,6 +1,11 @@
 export const orderService = (db, models) => ({
     getUserOrders: async (userId) => {
-        return models.order.findByUserId(userId);
+        const orders = await models.order.findByUserId(userId);
+        return Promise.all(orders.map(async (order) => {
+            const items = await models.orderItem.findByOrderId(order.id);
+            // console.log(`Order ${order.id} items:`, items.length, items[0]); 
+            return { ...order, items };
+        }));
     },
 
     getOrderDetails: async (orderId, userId) => {

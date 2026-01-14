@@ -153,6 +153,29 @@
 
 ---
 
+## Phase 14: Amazon-Inspired UI with TailwindCSS
+**Goal**: Overhaul the frontend UI to match Amazon-like aesthetics using TailwindCSS.
+
+- [x] T063 [P] Integrate TailwindCSS into Frontend
+  - [x] Install and configure Tailwind in `frontend/`
+  - [x] Remove/minimize existing vanilla CSS
+- [x] T064 [P] Create Global UI Layout (Header, Footer, Container)
+  - [x] Implement sticky header with search, cart, logo
+  - [x] Build responsive footer
+- [x] T065 [P] Implement Amazon-Inspired Product Card Component
+  - [x] Reusable card with image, rating, price, CTA
+- [x] T066 [P] Product Listing Page Styling
+  - [x] Responsive grid layout
+  - [x] Visual consistency updates
+- [x] T067 Cart and Checkout UI Enhancements
+  - [x] Clean cart summary panel
+  - [x] Readability improvements for checkout
+- [x] T068 [P] UI Responsiveness & Polish
+  - [x] Breakpoint adjustments
+  - [x] Hover states and seamless transitions
+
+---
+
 ## Dependencies & Execution Order
 1. **Phase 1 & 2**: MUST complete before any User Story.
 2. **Phase 3 (US1)**: Can be started as soon as Foundation is ready.
@@ -161,7 +184,8 @@
 5. **Phase 10**: Depends on Phase 3 foundations, builds upon Phase 9 enhancements.
 6. **Phase 12**: Depends on Backend Phase 2 and US1/US3 completion.
 7. **Phase 13**: Depends on Phase 2 foundation.
-8. **Phase 8**: Final step before production readiness.
+8. **Phase 14**: Frontend Overhaul. Can run after Phase 10 (or replace parts of it).
+9. **Phase 8**: Final step before production readiness.
 
 ## Parallel Execution Opportunities
 - T003, T004, T005 (Setup)
@@ -170,3 +194,4 @@
 - T022, T023, T026 (Within US2)
 - T053, T054, T057 (Redis Caching Foundations)
 - T058, T059, T062 (Event Bus Foundations)
+- T063, T064 (UI Foundation)

@@ -45,70 +45,86 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="admin-dashboard">
-            <header className="admin-header glass">
-                <h1>Admin Dashboard</h1>
-                <div className="header-right">
-                    <button className="logout-link" onClick={logout}>Logout</button>
+        <div className="min-h-screen bg-gray-100 font-sans">
+            {/* Admin Header */}
+            <header className="bg-amazon-dark text-white px-6 py-3 flex justify-between items-center shadow-md">
+                <div className="flex items-center gap-4">
+                    <h1 className="text-xl font-bold tracking-tight">Admin Dashboard</h1>
+                    <span className="text-xs bg-gray-700 px-2 py-0.5 rounded text-gray-300">v1.0</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <button onClick={logout} className="text-sm font-medium hover:text-primary transition-colors">Logout</button>
                 </div>
             </header>
 
-            <nav className="admin-tabs">
-                <button
-                    className={activeTab === 'products' ? 'active' : ''}
-                    onClick={() => setActiveTab('products')}
-                >
-                    Products
-                </button>
-                <button
-                    className={activeTab === 'orders' ? 'active' : ''}
-                    onClick={() => setActiveTab('orders')}
-                >
-                    Orders
-                </button>
-            </nav>
+            <div className="max-w-screen-2xl mx-auto p-6">
+                {/* Tabs */}
+                <nav className="flex gap-4 border-b border-gray-200 mb-6">
+                    <button
+                        className={`pb-2 px-4 font-medium text-sm transition-colors ${activeTab === 'products' ? 'border-b-2 border-primary text-black' : 'text-gray-500 hover:text-gray-800'}`}
+                        onClick={() => setActiveTab('products')}
+                    >
+                        Products
+                    </button>
+                    <button
+                        className={`pb-2 px-4 font-medium text-sm transition-colors ${activeTab === 'orders' ? 'border-b-2 border-primary text-black' : 'text-gray-500 hover:text-gray-800'}`}
+                        onClick={() => setActiveTab('orders')}
+                    >
+                        Orders Management
+                    </button>
+                </nav>
 
-            <main className="admin-content glass">
-                {activeTab === 'products' ? (
-                    <>
-                        <div className="admin-actions">
-                            <button className="add-btn">Add New Product</button>
-                        </div>
+                <main className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 min-h-[600px]">
+                    {activeTab === 'products' ? (
+                        <>
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-lg font-bold text-gray-800">Product Catalog</h2>
+                                <button className="bg-primary hover:bg-primary-hover border border-yellow-500 rounded-md py-1.5 px-4 text-sm text-black shadow-sm font-medium transition-colors">
+                                    Add New Product
+                                </button>
+                            </div>
 
-                        {loading ? (
-                            <div className="loader">Loading products...</div>
-                        ) : (
-                            <table className="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Stock</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {products.map(p => (
-                                        <tr key={p.id}>
-                                            <td>{p.name}</td>
-                                            <td>{p.category_name}</td>
-                                            <td>${parseFloat(p.price).toFixed(2)}</td>
-                                            <td>{p.stock_level}</td>
-                                            <td className="actions-cell">
-                                                <button className="edit-icon">✏️</button>
-                                                <button className="delete-icon" onClick={() => handleDelete(p.id)}>🗑️</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
-                    </>
-                ) : (
-                    <AdminOrders />
-                )}
-            </main>
+                            {loading ? (
+                                <div className="flex justify-center items-center h-64 text-gray-500">Loading products...</div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left text-sm text-gray-600">
+                                        <thead className="bg-gray-50 border-b border-gray-200 text-xs uppercase font-semibold text-gray-700">
+                                            <tr>
+                                                <th className="px-4 py-3">Name</th>
+                                                <th className="px-4 py-3">Category</th>
+                                                <th className="px-4 py-3">Price</th>
+                                                <th className="px-4 py-3">Stock</th>
+                                                <th className="px-4 py-3 text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {products.map(p => (
+                                                <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                                                    <td className="px-4 py-3 font-medium text-gray-900">{p.name}</td>
+                                                    <td className="px-4 py-3">{p.category_name}</td>
+                                                    <td className="px-4 py-3 text-gray-900 font-bold">${parseFloat(p.price).toFixed(2)}</td>
+                                                    <td className="px-4 py-3">
+                                                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.stock_level > 10 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                            {p.stock_level}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-4 py-3 text-right space-x-2">
+                                                        <button className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-1.5 rounded transition-colors">✏️</button>
+                                                        <button className="text-red-600 hover:text-red-800 hover:bg-red-50 p-1.5 rounded transition-colors" onClick={() => handleDelete(p.id)}>🗑️</button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <AdminOrders />
+                    )}
+                </main>
+            </div>
         </div>
     );
 };

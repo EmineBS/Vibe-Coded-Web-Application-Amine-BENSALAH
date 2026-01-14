@@ -98,6 +98,7 @@ As an **Admin**, I want to see all orders placed and update their shipping statu
 - **FR-007**: System MUST support multiple roles: Guest (read-only catalog), Registered User (cart/order), Admin (management).
 - **FR-012**: System MUST implement a Redis caching layer for high-traffic read operations (Product Listing, Product Details, Categories) with configurable TTL and intelligent cache invalidation.
 - **FR-013**: System MUST implement an internal event-driven architecture to decouple core business logic from side effects (logging, notifications, analytics).
+- **FR-014**: System MUST implement an Amazon-inspired UI using TailwindCSS for styling, featuring a responsive layout, sticky header, and consistent design tokens.
 
 ### Key Entities
 
