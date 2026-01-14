@@ -10,7 +10,7 @@ Implementation of a full-stack e-commerce platform with Guest, Registered User, 
 ## Technical Context
 
 **Language/Version**: Node.js (v20+), JavaScript (ESM)
-**Primary Dependencies**: React (Vite), Express, pg (node-postgres), jsonwebtoken, Zod (validation), Helmet, CORS, express-rate-limit
+**Primary Dependencies**: React (Vite), Express, pg (node-postgres), redis (caching), jsonwebtoken, Zod (validation), Helmet, CORS, express-rate-limit, EventEmitter (internal)
 **Storage**: PostgreSQL
 **Testing**: Vitest (Frontend), Supertest + Jest (Backend)
 **Target Platform**: Linux VPS
@@ -50,9 +50,17 @@ specs/001-ecommerce-core/
 backend/
 ├── src/
 │   ├── api/             # Routes and Controllers
-│   ├── services/        # Business Logic
+│   │   ├── routes/
+│   │   │   ├── auth.js
+│   │   │   ├── products.js
+│   │   │   ├── categories.js
+│   │   │   ├── orders.js
+│   │   │   └── admin.js
+│   ├── services/        # Business Logic & Event Bus
 │   ├── models/          # Data Access / Entities
-│   ├── middleware/      # Auth, Logging, Validation
+│   ├── middleware/      # Auth, Logging, Validation, Event Logs
+│   ├── subscribers/     # Decoupled Event Handlers (Side Effects)
+│   ├── constants/       # Centralized Events & Config
 │   ├── db/              # Migrations and Seeds
 │   └── app.js           # Server Entry
 └── tests/

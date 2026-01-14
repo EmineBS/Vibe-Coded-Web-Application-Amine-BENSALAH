@@ -1,3 +1,6 @@
+import eventBus from './eventBus.js';
+import { EVENTS } from '../constants/events.js';
+
 export const productService = (knex, models) => ({
     getProducts: async (filters) => {
         return models.product.findAll(filters);
@@ -13,14 +16,24 @@ export const productService = (knex, models) => ({
 
     // Admin CRUD
     createProduct: async (data) => {
-        return models.product.create(data);
+        const result = await models.product.create(data);
+        const [product] = result;
+        eventBus.publish(EVENTS.PRODUCT_CREATED, { id: product.id, name: product.name });
+        return result;
     },
 
     updateProduct: async (id, data) => {
-        return models.product.update(id, data);
+        const result = await models.product.update(id, data);
+        const [product] = result;
+        if (product) {
+            eventBus.publish(EVENTS.PRODUCT_UPDATED, { id: product.id, name: product.name });
+        }
+        return result;
     },
 
     deleteProduct: async (id) => {
-        return models.product.delete(id);
+        const result = await models.product.delete(id);
+        eventBus.publish(EVENTS.PRODUCT_DELETED, { id });
+        return result;
     },
 });

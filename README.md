@@ -28,6 +28,8 @@ The project follows a decoupled architecture:
 - **Secure Auth**: JWT-based session management with access/refresh tokens.
 - **RBAC**: Role-Based Access Control (Admin/User) for protected resources.
 - **Administrative CRUD**: Full suite of APIs for product, category, and order lifecycle management.
+- **Redis Caching**: High-performance caching layer for product listings, details, and categories with intelligent invalidation.
+- **Event-Driven Architecture**: Decoupled business logic using an internal event bus for security logging, notifications, and analytics.
 - **Security Baseline**: Helmet for headers, CORS for cross-origin protection, and BCrypt for password hashing.
 - **Performance**: Optimized SQL queries and modular service-based architecture.
 
@@ -47,9 +49,12 @@ ecommerce-platform/
 │   ├── src/
 │   │   ├── api/        # Routes & Controllers
 │   │   ├── db/         # Migrations & Database Config
-│   │   ├── middleware/ # Auth, RBAC, Validation
+│   │   ├── middleware/ # Auth, RBAC, Validation, Event Logging
 │   │   ├── models/     # Data Models
-│   │   └── services/   # Business Logic (Auth, Product, Checkout)
+│   │   ├── services/   # Business Logic (Auth, Product, Checkout, Event Bus)
+│   │   ├── subscribers/ # Event Handlers (Security, Notifications)
+│   │   ├── constants/  # Domain Events & Config
+│   │   └── utils/      # Cache Utilities
 ├── frontend/           # React App
 │   ├── src/
 │   │   ├── components/ # UI Components (Navbar, Grid, Modal)
@@ -68,6 +73,8 @@ PORT=3000
 DATABASE_URL=postgres://user:password@localhost:5432/ecommerce
 JWT_SECRET=your_super_secret_key
 REFRESH_TOKEN_SECRET=your_refresh_secret_key
+REDIS_URL=redis://localhost:6379
+CACHE_TTL=3600
 ```
 
 ### 2. Frontend Config
@@ -81,6 +88,7 @@ VITE_API_URL=http://localhost:3000/api
 ### Prerequisites
 - Node.js (v20+)
 - PostgreSQL
+- Redis (for caching)
 
 ### Steps
 1. **Database Setup**:

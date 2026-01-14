@@ -2,6 +2,7 @@ import express from 'express';
 import { validate } from '../../middleware/validate.js';
 import { authenticate, authorize } from '../../middleware/rbac.js';
 import { z } from 'zod';
+import { cache } from '../../utils/cache.js';
 
 const productSchema = z.object({
     body: z.object({
@@ -23,6 +24,8 @@ export const adminRoutes = (pService, oService) => {
     router.post('/products', validate(productSchema), async (req, res, next) => {
         try {
             const [product] = await pService.createProduct(req.body);
+            // Invalidate list cache
+            await cache.del(cache.keys.productList);
             res.status(201).json({ status: 'success', data: product });
         } catch (err) {
             next(err);
@@ -35,6 +38,9 @@ export const adminRoutes = (pService, oService) => {
             if (!product) {
                 return res.status(404).json({ status: 'error', message: 'Product not found' });
             }
+            // Invalidate list and specific product cache
+            await cache.del(cache.keys.productList);
+            await cache.del(cache.keys.productDetail(req.params.id));
             res.json({ status: 'success', data: product });
         } catch (err) {
             next(err);
@@ -44,6 +50,9 @@ export const adminRoutes = (pService, oService) => {
     router.delete('/products/:id', async (req, res, next) => {
         try {
             await pService.deleteProduct(req.params.id);
+            // Invalidate list and specific product cache
+            await cache.del(cache.keys.productList);
+            await cache.del(cache.keys.productDetail(req.params.id));
             res.status(204).send();
         } catch (err) {
             next(err);

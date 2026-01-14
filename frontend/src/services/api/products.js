@@ -8,7 +8,7 @@ export const getProducts = async (filters = {}) => {
 };
 
 export const getCategories = async () => {
-    const response = await fetch(`${API_URL}/products/categories`);
+    const response = await fetch(`${API_URL}/categories`);
     if (!response.ok) throw new Error('Failed to fetch categories');
     return response.json();
 };

@@ -91,7 +91,12 @@
 
 - [ ] T037 [P] Configure Nginx reverse proxy template for VPS
 - [ ] T038 [P] Create Docker Compose file or PM2 configuration
-- [ ] T039 Final security audit (verify JWT scopes, rate limits, and SQL sanitization)
+- [ ] T039 Final security audit:
+  - Verify JWT scope/role enforcement on all `/api/admin` routes
+  - Validate all `Zod` schemas cover every request input
+  - Audit SQL queries for Parameterized usage (prevent Injection)
+  - Verify rate limit thresholds (FR-005) and lockout timing
+  - Check Helmet headers and CORS policy are restrictive
 - [ ] T040 Prepare automated PG backup script in `backend/scripts/backup.sh`
 
 ---
@@ -120,9 +125,31 @@
 ## Phase 11: Finalization & Handover
 **Purpose**: Prepare the project for public viewing and collaboration
 
-- [ ] T050 Create a comprehensive `README.md` with setup, architecture, and features
-- [ ] T051 Initialize Git repository and commit project files
-- [ ] T052 [Optional] Push project to GitHub (requires user approval/token)
+- [x] T050 Create a comprehensive `README.md` with setup, architecture, and features
+- [x] T051 Initialize Git repository and commit project files
+- [x] T052 [Optional] Push project to GitHub (requires user approval/token)
+
+---
+
+## Phase 12: Redis Caching Layer
+**Goal**: Improve read performance for high-traffic API endpoints using Redis
+
+- [x] T053 [P] Setup Redis infrastructure and client initialization in `backend/src/services/cacheService.js`
+- [x] T054 [P] Create a reusable cache utility with standardized key naming and TTL in `backend/src/utils/cache.js`
+- [x] T055 Implement TTL-based caching and invalidation for Product Listing API in `backend/src/api/routes/products.js`
+- [x] T056 Implement per-product caching and invalidation for Product Details API in `backend/src/api/routes/products.js`
+- [x] T057 [P] Implement caching and invalidation for Categories API in `backend/src/api/routes/categories.js`
+
+---
+
+## Phase 13: Internal Event-Driven Architecture
+**Goal**: Decouple business logic from side effects using an internal event bus
+
+- [x] T058 [P] Implement Internal Event Bus in `backend/src/services/eventBus.js`
+- [x] T059 [P] Define centralized Domain Events in `backend/src/constants/events.js`
+- [x] T060 Emit domain events from `authService.js`, `checkoutService.js`, and `productService.js`
+- [x] T061 [P] Implement Event Handlers for side effects in `backend/src/subscribers/` (Refactor T011 security logging to be event-driven)
+- [x] T062 [P] Implement event logging middleware for debugging in `backend/src/middleware/eventLogger.js`
 
 ---
 
@@ -132,10 +159,14 @@
 3. **Phase 4 (US2)**: Depends on US1 (Products must exist to be added to cart).
 4. **Phase 5 (US3)**: Can run in parallel with US2.
 5. **Phase 10**: Depends on Phase 3 foundations, builds upon Phase 9 enhancements.
-6. **Phase 8**: Final step before production readiness.
+6. **Phase 12**: Depends on Backend Phase 2 and US1/US3 completion.
+7. **Phase 13**: Depends on Phase 2 foundation.
+8. **Phase 8**: Final step before production readiness.
 
 ## Parallel Execution Opportunities
 - T003, T004, T005 (Setup)
 - T007, T008, T009, T010, T011, T012, T013, T014 (Foundational Security/Middleware/Services)
 - T016, T017, T019, T020 (Within US1)
 - T022, T023, T026 (Within US2)
+- T053, T054, T057 (Redis Caching Foundations)
+- T058, T059, T062 (Event Bus Foundations)

@@ -1,6 +1,9 @@
+import eventBus from './eventBus.js';
+import { EVENTS } from '../constants/events.js';
+
 export const checkoutService = (knex, models) => ({
     processOrder: async (userId, items) => {
-        return knex.transaction(async (trx) => {
+        const order = await knex.transaction(async (trx) => {
             let totalPrice = 0;
             const orderItemsToCreate = [];
 
@@ -34,15 +37,16 @@ export const checkoutService = (knex, models) => ({
             const itemsWithOrderId = orderItemsToCreate.map(i => ({ ...i, order_id: order.id }));
             await trx('order_items').insert(itemsWithOrderId);
 
-            // Note: Stock decrement is deferred until payment is confirmed (as per spec)
-            // but we validated stock exists above.
-
             return order;
         });
+
+        eventBus.publish(EVENTS.ORDER_PLACED, { order_id: order.id, user_id: userId, total_price: order.total_price });
+
+        return order;
     },
 
     confirmPayment: async (orderId) => {
-        return knex.transaction(async (trx) => {
+        const updatedOrder = await knex.transaction(async (trx) => {
             const order = await trx('orders').where({ id: orderId }).first();
             if (!order) throw new Error('Order not found');
             if (order.status !== 'pending') throw new Error('Order already processed');
@@ -63,5 +67,9 @@ export const checkoutService = (knex, models) => ({
 
             return updatedOrder;
         });
+
+        eventBus.publish(EVENTS.PAYMENT_COMPLETED, { order_id: updatedOrder.id, user_id: updatedOrder.user_id });
+
+        return updatedOrder;
     }
 });

@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
+import eventBus from './eventBus.js';
+import { EVENTS } from '../constants/events.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_here';
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your_refresh_secret_here';
@@ -56,6 +58,9 @@ export const authService = {
             password_hash: passwordHash,
             role
         }).returning(['id', 'name', 'email', 'role']);
+
+        eventBus.publish(EVENTS.USER_REGISTERED, { id: user.id, email: user.email, name: user.name });
+
         return user;
     },
 
@@ -80,6 +85,8 @@ export const authService = {
         const tokenData = { id: user.id, email: user.email, role: user.role };
         const accessToken = authService.generateAccessToken(tokenData);
         const refreshToken = authService.generateRefreshToken(tokenData);
+
+        eventBus.publish(EVENTS.USER_LOGGED_IN, { id: user.id, email: user.email, role: user.role });
 
         return {
             user: { id: user.id, name: user.name, email: user.email, role: user.role },

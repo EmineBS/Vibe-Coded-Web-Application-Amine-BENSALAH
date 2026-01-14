@@ -10,11 +10,16 @@ import { checkoutService } from './services/checkoutService.js';
 import { orderService } from './services/orderService.js';
 import { authService } from './services/authService.js';
 import { productRoutes } from './api/routes/products.js';
+import { categoryRoutes } from './api/routes/categories.js';
 import { orderRoutes } from './api/routes/orders.js';
 import { userRoutes } from './api/routes/users.js';
 import { adminRoutes } from './api/routes/admin.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { standardLimiter } from './middleware/rateLimiter.js';
+import { connectRedis } from './services/cacheService.js';
+import initEventLogger from './middleware/eventLogger.js';
+import initSecuritySubscriber from './subscribers/securitySubscriber.js';
+import initNotificationSubscriber from './subscribers/notificationSubscriber.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +43,7 @@ const oService = orderService(db, models);
 
 // Routes
 app.use('/api/products', productRoutes(pService));
+app.use('/api/categories', categoryRoutes(pService));
 app.use('/api/orders', orderRoutes(cService, oService));
 app.use('/api/auth', userRoutes(db, authService));
 app.use('/api/admin', adminRoutes(pService, oService));
@@ -51,7 +57,11 @@ app.use((req, res) => res.status(404).json({ status: 'error', message: 'Not Foun
 // Error Handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+    await connectRedis();
+    initEventLogger();
+    initSecuritySubscriber();
+    initNotificationSubscriber();
     console.log(`Server running on port ${PORT}`);
 });
 

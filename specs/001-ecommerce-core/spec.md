@@ -96,6 +96,8 @@ As an **Admin**, I want to see all orders placed and update their shipping statu
 - **FR-005**: System MUST log all security events (login, failed login, sensitive data access) and implement IP-based rate limiting with temporary account lockout (after 5 failed attempts) for sensitive endpoints.
 - **FR-006**: Database schema MUST follow the PostgreSQL constraints (Foreign Keys, NOT NULL) defined in the constitution.
 - **FR-007**: System MUST support multiple roles: Guest (read-only catalog), Registered User (cart/order), Admin (management).
+- **FR-012**: System MUST implement a Redis caching layer for high-traffic read operations (Product Listing, Product Details, Categories) with configurable TTL and intelligent cache invalidation.
+- **FR-013**: System MUST implement an internal event-driven architecture to decouple core business logic from side effects (logging, notifications, analytics).
 
 ### Key Entities
 
